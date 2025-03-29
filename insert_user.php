@@ -1,65 +1,78 @@
+<!-- <?php
+include("includes/connection.php"); // Ensure database connection is included
+
+if (isset($_POST['sign_up'])) {
+    $first_name = mysqli_real_escape_string($con, $_POST['first_name']);
+    $last_name = mysqli_real_escape_string($con, $_POST['last_name']);
+    $email = mysqli_real_escape_string($con, $_POST['u_email']);
+    $password = mysqli_real_escape_string($con, $_POST['u_pass']);
+    $birthday = $_POST['u_birthday'];
+    $gender = $_POST['u_gender'];
+
+    // Hash password before saving
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Ensure email is not already registered
+    $check_email = "SELECT * FROM users WHERE email='$email'";
+    $run_email = mysqli_query($con, $check_email);
+
+    // Check if the query ran successfully
+    if (!$run_email) {
+        die("Database query failed: " . mysqli_error($con)); // Debugging line
+    }
+
+    if (mysqli_num_rows($run_email) > 0) {
+        echo "<script>alert('Email already exists! Try another.')</script>";
+    } else {
+        // Insert user into database
+        $insert_user = "INSERT INTO users (first_name, last_name, email, password, birthday, gender) 
+                        VALUES ('$first_name', '$last_name', '$email', '$hashed_password', '$birthday', '$gender')";
+
+        $run_user = mysqli_query($con, $insert_user);
+
+        if ($run_user) {
+            echo "<script>alert('Signup successful! You can now log in.')</script>";
+            echo "<script>window.open('signin.php', '_self')</script>";
+        } else {
+            echo "<script>alert('Signup failed! Please try again.')</script>";
+        }
+    }
+}
+?> -->
+
+
 <?php
-include("includes/connection.php");
+include("includes/connection.php"); // Database connection file
 
-	if(isset($_POST['sign_up'])){
+if (isset($_POST['sign_up'])) {
+    $first_name = mysqli_real_escape_string($con, $_POST['first_name']);
+    $last_name = mysqli_real_escape_string($con, $_POST['last_name']);
+    $email = mysqli_real_escape_string($con, $_POST['email']); // Ensure this column exists in the DB
+    $password = password_hash($_POST['u_pass'], PASSWORD_DEFAULT); // Secure password
+    $birthday = $_POST['u_birthday'];
+    $gender = $_POST['u_gender'];
 
-		$first_name = htmlentities(mysqli_real_escape_string($con,$_POST['first_name']));
-		$last_name = htmlentities(mysqli_real_escape_string($con,$_POST['last_name']));
-		$pass = htmlentities(mysqli_real_escape_string($con,$_POST['u_pass']));
-		$email = htmlentities(mysqli_real_escape_string($con,$_POST['u_email']));
-		$country = htmlentities(mysqli_real_escape_string($con,$_POST['u_country']));
-		$gender = htmlentities(mysqli_real_escape_string($con,$_POST['u_gender']));
-		$birthday = htmlentities(mysqli_real_escape_string($con,$_POST['u_birthday']));
-		$status = "verified";
-		$posts = "no";
-		$newgid = sprintf('%05d', rand(0, 999999));
+    // ✅ Debugging: Print the column names in the users table
+    $check_email = "SELECT * FROM users WHERE u_email='$email'";
+    $run_email = mysqli_query($con, $check_email);
 
-		$username = strtolower($first_name . "_" . $last_name . "_" . $newgid);
-		$check_username_query = "select user_name from users where user_email='$email'";
-		$run_username = mysqli_query($con,$check_username_query);
+    if (!$run_email) {
+        die("Query Failed: " . mysqli_error($con)); // Debugging
+    }
 
-		if(strlen($pass) <9 ){
-			echo"<script>alert('Password should be minimum 9 characters!')</script>";
-			exit();
-		}
+    if (mysqli_num_rows($run_email) > 0) {
+        echo "<script>alert('Email already registered!')</script>";
+    } else {
+        $insert_user = "INSERT INTO usersapp (first_name, last_name, u_email, password, birthday, gender) 
+                        VALUES ('$first_name', '$last_name', '$email', '$password', '$birthday', '$gender')";
 
-		$check_email = "SELECT * FROM users WHERE user_email='$email'";
-		$run_email = mysqli_query($con, $check_email);
+        $query = mysqli_query($con, $insert_user);
 
-		if (!$run_email) {
-			die("Query failed: " . mysqli_error($con));
-		}
+        if (!$query) {
+            die("Insertion Failed: " . mysqli_error($con)); // ✅ Print error if insertion fails
+        }
 
-		$check = mysqli_num_rows($run_email);
-
-
-		if($check == 1){
-			echo "<script>alert('Email already exist, Please try using another email')</script>";
-			echo "<script>window.open('signup.php', '_self')</script>";
-			exit();
-		}
-
-		$rand = rand(1, 3); //Random number between 1 and 3
-
-			if($rand == 1)
-				$profile_pic = "head_red.png";
-			else if($rand == 2)
-				$profile_pic = "head_sun_flower.png";
-			else if($rand == 3)
-				$profile_pic = "head_turqoise.png";
-
-		$insert = "insert into users (f_name,l_name,user_name,describe_user,Relationship,user_pass,user_email,user_country,user_gender,user_birthday,user_image,user_cover,user_reg_date,status,posts,recovery_account)
-		values('$first_name','$last_name','$username','Hello Coding Cafe.This is my default status!','...','$pass','$email','$country','$gender','$birthday','$profile_pic','default_cover.jpg',NOW(),'$status','$posts','Iwanttoputading intheuniverse.')";
-		
-		$query = mysqli_query($con, $insert);
-
-		if($query){
-			echo "<script>alert('Well Done $first_name, you are good to go.')</script>";
-			echo "<script>window.open('signin.php', '_self')</script>";
-		}
-		else{
-			echo "<script>alert('Registration failed, please try again!')</script>";
-			echo "<script>window.open('signup.php', '_self')</script>";
-		}
-	}
+        echo "<script>alert('Registration Successful!'); window.location.href = 'signin.php';</script>";
+    }
+}
 ?>

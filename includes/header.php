@@ -5,7 +5,6 @@ if (session_status() == PHP_SESSION_NONE) {
 include("includes/connection.php");
 include("functions/functions.php");
 
-
 // Check if the user is logged in
 if (!isset($_SESSION['user_email'])) {
     echo "<script>alert('You must log in first!')</script>";
@@ -14,15 +13,14 @@ if (!isset($_SESSION['user_email'])) {
 }
 
 $user = $_SESSION['user_email'];
-$get_user = "SELECT * FROM users WHERE user_email='$user'"; 
-$run_user = mysqli_query($con, $get_user);
 
-// Check for query errors
-if (!$run_user) {
-    die("Query failed: " . mysqli_error($con));
-}
-
-$row = mysqli_fetch_array($run_user);
+// Use prepared statement to prevent SQL injection
+$stmt = $con->prepare("SELECT * FROM users WHERE user_email = ?");
+$stmt->bind_param("s", $user);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
 
 if (!$row) {
     echo "<script>alert('User not found! Please log in again.')</script>";
@@ -30,13 +28,12 @@ if (!$row) {
     exit();
 }
 
-$user_id = $row['id']; 
+$user_id = $row['id'];
 $user_name = $row['user_name'];
 $first_name = $row['f_name'];
 $last_name = $row['l_name'];
 $describe_user = $row['describe_user'];
-$Relationship_status = $row['Relationship'];
-$user_pass = $row['user_pass'];
+$relationship_status = $row['Relationship'];
 $user_email = $row['user_email'];
 $user_country = $row['user_country'];
 $user_gender = $row['user_gender'];
@@ -46,21 +43,19 @@ $user_cover = $row['user_cover'];
 $recovery_account = $row['recovery_account'];
 $register_date = $row['user_reg_date'];
 
-$user_posts = "SELECT * FROM posts WHERE id='$user_id'"; 
-$run_posts = mysqli_query($con, $user_posts); 
-
-// Check for posts query errors
-if (!$run_posts) {
-    die("Posts query failed: " . mysqli_error($con));
-}
-
-$posts = mysqli_num_rows($run_posts);
+// Secure the user_posts query
+$stmt = $con->prepare("SELECT COUNT(*) AS post_count FROM posts WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$posts = $result->fetch_assoc()['post_count'];
+$stmt->close();
 ?>
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -71,7 +66,7 @@ $posts = mysqli_num_rows($run_posts);
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href='profile.php?<?php echo "u_id=$user_id"; ?>'><?php echo "$first_name"; ?></a></li>
+                <li><a href='profile.php?<?php echo "u_id=$user_id"; ?>'><?php echo htmlspecialchars($first_name); ?></a></li>
                 <li><a href="home.php">Home</a></li>
                 <li><a href="member.php">Find People</a></li>
                 <li><a href="messages.php?u_id=new">Messages</a></li>

@@ -1,79 +1,99 @@
 <!DOCTYPE html>
+<?php
+session_start();
+include("includes/connection.php"); // Ensure database connection is included
+
+if (isset($_POST['login'])) {
+    $email = mysqli_real_escape_string($con, $_POST['u_email']);
+    $password = $_POST['u_pass'];
+
+    // Fetch user data
+    $check_user = "SELECT * FROM users WHERE email='$email'";
+    $run_user = mysqli_query($con, $check_user);
+
+    if ($run_user && mysqli_num_rows($run_user) > 0) {
+        $row = mysqli_fetch_assoc($run_user);
+        $stored_password = $row['password']; // Fetch stored hashed password
+
+        if (password_verify($password, $stored_password)) {
+            $_SESSION['user_email'] = $email; // Store session for logged-in user
+            echo "<script>alert('Login Successful!')</script>";
+            echo "<script>window.open('home.php', '_self')</script>"; // Redirect after login
+        } else {
+            echo "<script>alert('Incorrect password!')</script>";
+        }
+    } else {
+        echo "<script>alert('Email not found!')</script>";
+    }
+}
+?>
 <html>
 <head>
-	<title>Signin</title>
-	<meta charset="utf-8">
- 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Signin | Campus Connect</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #ffe6f2;
+            font-family: Arial, sans-serif;
+        }
+        .main-content {
+            width: 40%;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            color: #ff1493;
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            background-color: #ff1493;
+            color: white;
+            width: 100%;
+            border-radius: 30px;
+        }
+        .btn-custom:hover {
+            background-color: #e60073;
+        }
+        .link-text {
+            color: #ff1493;
+            text-decoration: none;
+        }
+        .link-text:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<style>
-	body{
-		overflow-x: hidden;
-	}
-	.main-content{
-		width: 50%;
-		height: 40%;
-		margin: 10px auto;
-		background-color: #fff;
-		border: 2px solid #e6e6e6;
-		padding: 40px 50px;
-	}
-	.header{
-		border: 0px solid #000;
-		margin-bottom: 5px;
-	}
-	.well{
-		background-color: #187FAB;
-	}
-	#signin{
-		width: 60%;
-		border-radius: 30px;
-	}
-	.overlap-text{
-		position: relative;
-	}
-	.overlap-text a{
-		position: absolute;
-		top: 8px;
-		right: 10px;
-		font-size: 14px;
-		text-decoration: none;
-		font-family: 'Overpass Mono', monospace;
-		letter-spacing: -1px;
-
-	}
-</style>
 <body>
-<div class="row">
-	<div class="col-sm-12">
-		<div class="well">
-			<center><h1 style="color: white;">Coding Cafe</h1></center>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-sm-12">
-		<div class="main-content">
-			<div class="header">
-				<h3 style="text-align: center;"><strong>Login to Coding Cafe</strong></h3>
-			</div>
-			<div class="l-part">
-				<form action="" method="post">
-					<input type="email" name="email" placeholder="Email" required="required" class="form-control input-md"><br>
-					<div class="overlap-text">
-						<input type="password" name="pass" placeholder="Password" required="required" class="form-control input-md"><br>
-						<a style="text-decoration:none;float: right;color: #187FAB;" data-toggle="tooltip" title="Reset Password" href="forgot_password.php">Forgot?</a>
-					</div>
-					<a style="text-decoration: none;float: right;color: #187FAB;" data-toggle="tooltip" title="Create Account!" href="signup.php">Don't have an account?</a><br><br>
-
-					<center><button id="signin" class="btn btn-info btn-lg" name="login">Login</button></center>
-					<?php include("login.php"); ?>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+    <div class="container">
+        <div class="main-content">
+            <h2 class="header">Campus Connect</h2>
+            <h4 class="text-center">Login to your account</h4>
+            <form action="" method="post">
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="pass" class="form-control" placeholder="Password" required>
+                </div>
+                <div class="text-right">
+                    <a href="forgot_password.php" class="link-text">Forgot Password?</a>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-custom btn-lg" name="login">Login</button>
+            </form>
+            <br>
+            <div class="text-center">
+                <p>Don't have an account? <a href="signup.php" class="link-text">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

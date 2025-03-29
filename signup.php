@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Signup</title>
+	<title>Campus Connect - Signup</title>
 	<meta charset="utf-8">
  	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,33 +11,46 @@
 <style>
 	body{
 		overflow-x: hidden;
+		background-color: #ffe6f2;
 	}
 	.main-content{
 		width: 50%;
-		height: 40%;
-		margin: 10px auto;
+		height: auto;
+		margin: 50px auto;
 		background-color: #fff;
-		border: 2px solid #e6e6e6;
+		border-radius: 20px;
+		box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 		padding: 40px 50px;
 	}
 	.header{
-		border: 0px solid #000;
-		margin-bottom: 5px;
+		text-align: center;
+		color: #d63384;
+		margin-bottom: 20px;
 	}
 	.well{
-		background-color: #187FAB;
+		background-color: #ff85a2;
+		border-radius: 10px;
+		color: white;
+		text-align: center;
 	}
 	#signup{
-		width: 60%;
+		width: 100%;
 		border-radius: 30px;
+		background-color: #ff4d79;
+		border: none;
+		color: white;
+		font-size: 18px;
+		padding: 10px;
 	}
-
+	#signup:hover{
+		background-color: #ff3366;
+	}
 </style>
 <body>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="well">
-			<center><h1 style="color: white;">Coding Cafe</h1></center>
+			<h1>Campus Connect</h1>
 		</div>
 	</div>
 </div>
@@ -45,56 +58,43 @@
 	<div class="col-sm-12">
 		<div class="main-content">
 			<div class="header">
-				<h3 style="text-align: center;"><strong>Join Coding Cafe</strong></h3>
+				<h3><strong>Join Campus Connect</strong></h3>
 				<hr>
 			</div>
 			<div class="l-part">
 				<form action="" method="post">
 					<div class="input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-						<input type="text" class="form-control" placeholder="First Name" name="first_name" required="required">
-					</div><br>
-					<div class="input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-						<input type="text" class="form-control" placeholder="First Name" name="last_name" required="required">
-					</div><br>
-					<div class="input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-						<input id="password" type="password" class="form-control" placeholder="Password" name="u_pass" required="required">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<input type="text" class="form-control" placeholder="First Name" name="first_name" required>
 					</div><br>
 					<div class="input-group">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-						<input id="email" type="email" class="form-control" placeholder="Email" name="u_email" required="required">
+						<input type="text" class="form-control" placeholder="Last Name" name="last_name" required>
 					</div><br>
 					<div class="input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-down"></i></span>
-						<select class="form-control" name="u_country" required="required">
-							<option disabled>Select your Country</option>
-							<option>Pakistan</option>
-							<option>United States of America</option>
-							<option>India</option>
-							<option>Japan</option>
-							<option>UK</option>
-							<option>France</option>
-							<option>Germany</option>
-						</select>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+						<input type="password" class="form-control" placeholder="Password" name="u_pass" required>
 					</div><br>
 					<div class="input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-down"></i></span>
-						<select class="form-control input-md" name="u_gender" required="required">
-							<option disabled>Select your Gender</option>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+						<input type="email" class="form-control" placeholder="Email" name="u_email" required>
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+						<input type="date" class="form-control" name="u_birthday" required>
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+						<select class="form-control" name="u_gender" required>
+							<option disabled selected>Select your Gender</option>
 							<option>Male</option>
 							<option>Female</option>
 							<option>Others</option>
 						</select>
 					</div><br>
-					<div class="input-group">
-						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-						<input type="date" class="form-control input-md" placeholder="Email" name="u_birthday" required="required">
-					</div><br>
-					<a style="text-decoration: none;float: right;color: #187FAB;" data-toggle="tooltip" title="Signin" href="signin.php">Already have an account?</a><br><br>
+					<a style="text-decoration: none;float: right;color: #d63384;" href="signin.php">Already have an account?</a><br><br>
 
-					<center><button id="signup" class="btn btn-info btn-lg" name="sign_up">Signup</button></center>
+					<center><button id="signup" name="sign_up">Signup</button></center>
 					<?php include("insert_user.php"); ?>
 				</form>
 			</div>
