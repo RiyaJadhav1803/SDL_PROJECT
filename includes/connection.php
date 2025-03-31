@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $user = 'root';
-$password = 'Riya@123';
+$password = '';
 $database = 'social_network';
 
 $con = mysqli_connect($host, $user, $password, $database);
