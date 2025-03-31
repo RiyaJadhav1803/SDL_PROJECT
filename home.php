@@ -3,7 +3,7 @@
 session_start();
 
 include("includes/header.php");
-include("includes/db.php"); // Ensure database connection is included
+// include("includes/db.php"); // Ensure database connection is included
 
 if (!isset($_SESSION['user_email'])) {
 	echo "<script>window.open('signin.php', '_self')</script>";
@@ -20,7 +20,7 @@ $result = mysqli_stmt_get_result($stmt);
 $row = mysqli_fetch_array($result);
 
 $user_name = $row['user_name'];
-$user_id = $row['user_id'];
+$user_id = $row['id'];
 $user_image = $row['user_image'];
 ?>
 <html>
@@ -34,7 +34,7 @@ $user_image = $row['user_image'];
     <link rel="stylesheet" type="text/css" href="style/home_style.css">
     <style>
         body { background-color: #f4f4f4; }
-        .navbar { background-color: #007bff; }
+        .navbar { background-color:rgb(255, 0, 111); }
         .navbar a { color: white; }
         .container { margin-top: 20px; }
         .post-box { background: white; padding: 20px; border-radius: 10px; }
@@ -46,7 +46,7 @@ $user_image = $row['user_image'];
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="#">SocialApp</a>
         <div class="ml-auto">
-            <img src="user_images/<?php echo $user_image; ?>" class="rounded-circle" width="40" height="40">
+            <img src="<?php echo $user_image; ?>" class="rounded-circle" width="40" height="40">
             <span class="text-white ml-2">Welcome, <?php echo $user_name; ?>!</span>
         </div>
     </nav>

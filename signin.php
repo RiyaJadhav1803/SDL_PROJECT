@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <?php
 session_start();
-include("includes/connection.php"); // Ensure database connection is included
 
-if (isset($_POST['login'])) {
-    $email = mysqli_real_escape_string($con, $_POST['u_email']);
-    $password = $_POST['u_pass'];
+include("includes/connection.php");
 
-    // Fetch user data
-    $check_user = "SELECT * FROM users WHERE email='$email'";
-    $run_user = mysqli_query($con, $check_user);
+	if (isset($_POST['login'])) {
 
-    if ($run_user && mysqli_num_rows($run_user) > 0) {
-        $row = mysqli_fetch_assoc($run_user);
-        $stored_password = $row['password']; // Fetch stored hashed password
+		$email = htmlentities(mysqli_real_escape_string($con, $_POST['email']));
+		$pass = htmlentities(mysqli_real_escape_string($con, $_POST['pass']));
 
-        if (password_verify($password, $stored_password)) {
-            $_SESSION['user_email'] = $email; // Store session for logged-in user
-            echo "<script>alert('Login Successful!')</script>";
-            echo "<script>window.open('home.php', '_self')</script>"; // Redirect after login
-        } else {
-            echo "<script>alert('Incorrect password!')</script>";
-        }
-    } else {
-        echo "<script>alert('Email not found!')</script>";
-    }
-}
-?>
+		$select_user = "select * from users where user_email='$email' AND user_pass='$pass' AND status='verified'";
+		$query= mysqli_query($con, $select_user);
+		$check_user = mysqli_num_rows($query);
+
+		if($check_user == 1){
+			$_SESSION['user_email'] = $email;
+
+			echo "<script>window.open('home.php', '_self')</script>";
+		}else{
+			echo"<script>alert('Your Email or Password is incorrect')</script>";
+		}
+	}
+?> 
+
+
 <html>
 <head>
     <title>Signin | Campus Connect</title>

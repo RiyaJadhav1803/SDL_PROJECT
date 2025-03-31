@@ -1,6 +1,6 @@
 <?php
 
-$con = mysqli_connect("localhost","root","","social_network") or die("Connection was not established");
+$con = mysqli_connect("localhost","root","Riya@123","social_network") or die("Connection was not established");
 
 //function for inserting post
 
@@ -108,8 +108,13 @@ function get_posts(){
 	}
 
 	$start_from = ($page-1) * $per_page;
-
-	$get_posts = "select * from posts ORDER by 1 DESC LIMIT $start_from, $per_page";
+	
+	$user = $_SESSION['user_email'];
+	$get_user = "SELECT * FROM users WHERE user_email='$user'";
+	$run_user = mysqli_query($con, $get_user);
+	$row = mysqli_fetch_array($run_user);
+	$user_id = $row['id'];
+	$get_posts = "select * from posts where id='$user_id' ORDER by 1 DESC LIMIT $start_from, $per_page";
 
 	$run_posts = mysqli_query($con, $get_posts);
 
@@ -124,9 +129,9 @@ function get_posts(){
 		$user = "select *from users where id='$user_id' AND posts='yes'";
 		$run_user = mysqli_query($con,$user);
 		$row_user = mysqli_fetch_array($run_user);
-
-		$user_name = $row_user['user_name'];
-		$user_image = $row_user['user_image'];
+ 
+		$user_name = $row['user_name'];
+		$user_image = $row['user_image'];
 
 		if($content=="No" && strlen($upload_image) >= 1){
 			echo"
@@ -136,7 +141,7 @@ function get_posts(){
 				<div id='posts' class='col-sm-6'>
 					<div class='row'>
 						<div class='col-sm-2'>
-						<p><img src='users/$user_image' class='img-circle' width='100px' height='100px'></p>
+						<p><img src='$user_image' class='img-circle' width='50px' height='50px'></p>
 						</div>
 						<div class='col-sm-6'>
 							<h3><a style='text-decoration:none; cursor:pointer;color #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
@@ -166,7 +171,7 @@ function get_posts(){
 				<div id='posts' class='col-sm-6'>
 					<div class='row'>
 						<div class='col-sm-2'>
-						<p><img src='users/$user_image' class='img-circle' width='100px' height='100px'></p>
+						<p><img src='$user_image' class='img-circle' width='50px' height='50px'></p>
 						</div>
 						<div class='col-sm-6'>
 							<h3><a style='text-decoration:none; cursor:pointer;color #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>
@@ -197,7 +202,7 @@ function get_posts(){
 				<div id='posts' class='col-sm-6'>
 					<div class='row'>
 						<div class='col-sm-2'>
-						<p><img src='users/$user_image' class='img-circle' width='100px' height='100px'></p>
+						<p><img src='$user_image' class='img-circle' width='50px' height='50px'></p>
 						</div>
 						<div class='col-sm-6'>
 							<h3><a style='text-decoration:none; cursor:pointer;color #3897f0;' href='user_profile.php?u_id=$user_id'>$user_name</a></h3>

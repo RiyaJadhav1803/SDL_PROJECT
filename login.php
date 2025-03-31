@@ -20,4 +20,5 @@ include("includes/connection.php");
 			echo"<script>alert('Your Email or Password is incorrect')</script>";
 		}
 	}
-?>
+?> 
+

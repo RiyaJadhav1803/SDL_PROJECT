@@ -35,7 +35,7 @@ if (isset($_POST['update'])) {
     $user_country = htmlentities($_POST['user_country']);
     $user_gender = htmlentities($_POST['user_gender']);
     $user_birthday = htmlentities($_POST['user_birthday']);
-    $user_pass = password_hash($_POST['user_pass'], PASSWORD_BCRYPT);
+    $user_pass = htmlentities($_POST['user_pass']);
 
     $u_image = $_FILES['u_image']['name'];
     $image_tmp = $_FILES['u_image']['tmp_name'];
@@ -55,6 +55,7 @@ if (isset($_POST['update'])) {
     
     if ($stmt->execute()) {
         echo "<div class='alert alert-success'>Profile Updated Successfully!</div>";
+        echo "<script>window.open('profile.php', '_self')</script>";
     } else {
         echo "<div class='alert alert-danger'>Error updating profile!</div>";
     }
@@ -110,7 +111,7 @@ if (isset($_POST['update'])) {
     <input type="date" name="user_birthday" value="<?php echo $user_birthday; ?>" required>
 
     <label>Password:</label>
-    <input type="password" name="user_pass" required>
+    <input type="password" name="user_pass" >
 
     <label>Profile Picture:</label>
     <input type="file" name="u_image" onchange="previewImage(event)">
